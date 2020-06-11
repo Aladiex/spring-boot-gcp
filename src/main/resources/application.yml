@@ -1,0 +1,13 @@
+public:
+  ip: 128.199.105.133
+
+spring:
+  datasource:
+    url: jdbc:mysql://${public.ip}:3306/core?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: aladiex
+    password: alaala
+  jpa:
+    show-sql: true
+
+server:
+  port: 8080
