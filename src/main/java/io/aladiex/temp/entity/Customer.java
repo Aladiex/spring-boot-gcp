@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -73,6 +74,9 @@ public class Customer implements Serializable {
 
     @Column(name = "secret")
     private String secret;
+    
+    @Column(name = "sale")
+    private int sale;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -126,7 +130,15 @@ public class Customer implements Serializable {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
+    public int getSale() {
+		return sale;
+	}
+
+	public void setSale(int sale) {
+		this.sale = sale;
+	}
+
+	public String getLastName() {
         return lastName;
     }
 

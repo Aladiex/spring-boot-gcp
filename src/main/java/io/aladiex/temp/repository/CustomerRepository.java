@@ -1,6 +1,9 @@
 package io.aladiex.temp.repository;
 
 import io.aladiex.temp.entity.Customer;
+
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +13,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
+	Optional<Customer> findByEmail(String email);
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,6 +48,18 @@ public class CustomerService {
     public Page<Customer> findAll(Pageable pageable) {
         log.debug("Request to get all Customers");
         return customerRepository.findAll(pageable);
+    }
+    
+    /**
+     * Get all the customers.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Customer> getAll() {
+        log.debug("Request to get all Customers");
+        return customerRepository.findAll();
     }
 
 
