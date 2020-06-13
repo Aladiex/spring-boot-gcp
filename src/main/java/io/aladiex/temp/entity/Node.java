@@ -3,23 +3,25 @@ package io.aladiex.temp.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import io.aladiex.temp.tree.SalesAddedEvent;
+import io.aladiex.temp.tree.SalesAddedListenner;
+
+
 public class Node {
 	
 	
 	private int id;
 	private Node parent;
 	public ArrayList<Node> children = new ArrayList<Node>();
-	private Customer customer = new Customer();
+	private Customer customer = null;
 	private String origin;
 	private int position=0;
-	
-
 	private int level = 0;
-	
+	private SalesAddedListenner listenner;
 	
 	public Node(Customer customer)
 	{
-		this.customer = customer;
+		this.setCustomer(customer);
 	}
 	
 	public int getPosition() {
@@ -70,6 +72,19 @@ public class Node {
 		node.setParent(this);
 	}
 	
+//	the parent call the addSale() method
+	public void addSale(int sale)
+	{
+		this.getCustomer().setSale(this.getCustomer().getSale()+sale);
+		if(this.getParent()!=null)
+		{
+			this.getParent().addSale(sale);
+		}
+		if (listenner != null) {
+			listenner.onSalesAdded(new SalesAddedEvent(this));
+		}
+	}
+	
 	public String toString()
 	{
 		String str = "";
@@ -77,13 +92,29 @@ public class Node {
 		{
 			str +="&emsp;";
 		}
-		str+=this.customer.getEmail()+"-"+this.customer.getSale()+"<br>";
+		str+=this.getCustomer().getEmail()+"-"+this.getCustomer().getSale()+"-"+this.getLevel()+"<br>";
 		
 		for(int j = 0; j<children.size();j++)
 		{
 			str+=children.get(j).toString();
 		}
 		return str;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public SalesAddedListenner getListenner() {
+		return listenner;
+	}
+
+	public void setListenner(SalesAddedListenner listenner) {
+		this.listenner = listenner;
 	}
 	
 }
