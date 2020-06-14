@@ -20,15 +20,24 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(name = "customerId")
+    private Long customerId;
 
-    @Column(name = "amount", precision = 21, scale = 2)
+    @Column(name = "amount", precision = 8, scale = 2)
     private BigDecimal amount;
 
     @Column(name = "slot")
     private Integer slot;
 
-    @Column(name = "fee")
-    private BigDecimal fee;
+    @Column(name = "nameToken")
+    private String nameToken;
+    
+    @Column(name = "ethFee")
+    private BigDecimal ethFee;
+    
+    @Column(name = "ethBonusFee")
+    private BigDecimal ethBonusFee;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -48,9 +57,8 @@ public class Order implements Serializable {
     @Column(name = "booking")
     private Boolean booking;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private String status;
 
     @Column(name = "created_at")
     private Long createdAt;
@@ -60,11 +68,8 @@ public class Order implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
-    private Round round;
+    private long roundId;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "orders", allowSetters = true)
-    private Asset asset;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -83,15 +88,49 @@ public class Order implements Serializable {
         this.amount = amount;
     }
 
-    public BigDecimal getFee() {
-        return fee;
-    }
+    
 
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
-    }
+    public Long getCustomerId() {
+		return customerId;
+	}
 
-    public BigDecimal getPrice() {
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	public Integer getSlot() {
+		return slot;
+	}
+
+	public void setSlot(Integer slot) {
+		this.slot = slot;
+	}
+
+	public String getNameToken() {
+		return nameToken;
+	}
+
+	public void setNameToken(String nameToken) {
+		this.nameToken = nameToken;
+	}
+
+	public BigDecimal getEthFee() {
+		return ethFee;
+	}
+
+	public void setEthFee(BigDecimal ethFee) {
+		this.ethFee = ethFee;
+	}
+
+	public BigDecimal getEthBonusFee() {
+		return ethBonusFee;
+	}
+
+	public void setEthBonusFee(BigDecimal ethBonusFee) {
+		this.ethBonusFee = ethBonusFee;
+	}
+
+	public BigDecimal getPrice() {
         return price;
     }
 
@@ -139,11 +178,11 @@ public class Order implements Serializable {
         this.booking = booking;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -163,21 +202,14 @@ public class Order implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Round getRound() {
-        return round;
+    public Long getRoundId() {
+        return roundId;
     }
 
-    public void setRound(Round round) {
-        this.round = round;
+    public void setRoundId(Long roundId) {
+        this.roundId = roundId;
     }
 
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -197,7 +229,7 @@ public class Order implements Serializable {
                 "id=" + getId() +
                 ", booking='" + getBooking() + "'" +
                 ", amount=" + getAmount() +
-                ", fee='" + getFee() + "'" +
+                ", ethFee='" + getEthFee() + "'" +
                 ", cost='" + getCost() + "'" +
                 ", status='" + getStatus() + "'" +
                 ", createdAt=" + getCreatedAt() +

@@ -1,28 +1,22 @@
 package io.aladiex.temp.controller;
 
-import io.aladiex.temp.entity.Customer;
-import io.aladiex.temp.entity.Node;
-
-import io.aladiex.temp.service.CustomerService;
-import io.aladiex.temp.tree.SalesAddedEvent;
-import io.aladiex.temp.tree.SalesAddedListenner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.aladiex.temp.entity.Customer;
+import io.aladiex.temp.entity.Node;
+import io.aladiex.temp.service.CustomerService;
+import io.aladiex.temp.tree.SalesAddedEvent;
+import io.aladiex.temp.tree.SalesAddedListenner;
 
 /**
  * REST controller for managing {@link io.aladiex.common.domain.Customer}.
@@ -38,8 +32,7 @@ public class CustomerController implements SalesAddedListenner {
     private final CustomerService customerService;
     Node root = null;
     public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-        
+        this.customerService = customerService;  
     }
     
     
@@ -82,11 +75,7 @@ public class CustomerController implements SalesAddedListenner {
         		Node parent = treeMap.get(origin);
         		parent.addChild(node);
         	}
-        	
-        }
-       
-
-        
+        }        
     }
     
     /**
@@ -102,18 +91,13 @@ public class CustomerController implements SalesAddedListenner {
     
     @GetMapping("tree/create")
     public ResponseEntity<String> createTree() {
-    	
-    	
     	this.treeMap.clear();
     	this.addTree();    	
     	
         return ResponseEntity.ok().body("OK " + treeMap.size() +" node added");
-        
     }
     @GetMapping("tree/addSale/{email}/{sale}")
     public ResponseEntity<String> addSale(@PathVariable String email,@PathVariable int sale) {
-    	
-    	
     	Node node = this.treeMap.get(email);
     	if(node !=null)
     	{
@@ -148,7 +132,5 @@ public class CustomerController implements SalesAddedListenner {
 		// TODO Auto-generated method stub
 		Node source = event.getSource();
 		customerService.save(source.getCustomer());
-		
-		
 	}
 }

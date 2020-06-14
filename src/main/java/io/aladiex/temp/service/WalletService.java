@@ -61,6 +61,21 @@ public class WalletService {
         log.debug("Request to get Wallet : {}", id);
         return walletRepository.findById(id);
     }
+    
+    
+    /**
+     * Get one wallet by customerId and symbol.
+     *
+     * @param id the customer Id.
+     * @param symbol of currency
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<Wallet> findOneByCustomerIdAndCurrencySymbol(Long id, String symbol) {
+        log.debug("Request to get Wallet : {}", id);
+        return walletRepository.findByCustomer_IdAndCurrency_Symbol(id, symbol);
+    }
+    
 
     /**
      * Delete the wallet by id.
