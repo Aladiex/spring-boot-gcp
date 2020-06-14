@@ -21,23 +21,31 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "customerId")
-    private Long customerId;
+    @Column(name = "projectId")
+    private Long projectId;
 
+    
     @Column(name = "amount", precision = 8, scale = 2)
     private BigDecimal amount;
 
+    @Column(name = "ownerId")
+    private Long ownerId;
+    
+    @Column(name = "nameToken")
+    private String nameToken;
+
+    @Column(name = "ethFee")
+    private BigDecimal ethFee;
+
+    @Column(name = "ethBonusFee")
+    private BigDecimal ethBonusFee;
+
+ 
     @Column(name = "slot")
     private Integer slot;
 
-    @Column(name = "nameToken")
-    private String nameToken;
-    
-    @Column(name = "ethFee")
-    private BigDecimal ethFee;
-    
-    @Column(name = "ethBonusFee")
-    private BigDecimal ethBonusFee;
+    @Column(name = "bonusFee")
+    private BigDecimal bonusFee;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -57,8 +65,9 @@ public class Order implements Serializable {
     @Column(name = "booking")
     private Boolean booking;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private Status status;
 
     @Column(name = "created_at")
     private Long createdAt;
@@ -70,6 +79,9 @@ public class Order implements Serializable {
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
     private Round round;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = "orders", allowSetters = true)
+    private Asset asset;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -88,22 +100,29 @@ public class Order implements Serializable {
         this.amount = amount;
     }
 
-    
 
-    public Long getCustomerId() {
-		return customerId;
+    public Long getProjectId() {
+		return projectId;
 	}
 
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 
-	public Integer getSlot() {
-		return slot;
+	public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Long getOwnerId() {
+		return ownerId;
 	}
 
-	public void setSlot(Integer slot) {
-		this.slot = slot;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public String getNameToken() {
@@ -130,15 +149,23 @@ public class Order implements Serializable {
 		this.ethBonusFee = ethBonusFee;
 	}
 
-	public BigDecimal getPrice() {
-        return price;
-    }
+	public Integer getSlot() {
+		return slot;
+	}
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+	public void setSlot(Integer slot) {
+		this.slot = slot;
+	}
 
-    public BigDecimal getCost() {
+	public BigDecimal getBonusFee() {
+		return bonusFee;
+	}
+
+	public void setBonusFee(BigDecimal bonusFee) {
+		this.bonusFee = bonusFee;
+	}
+
+	public BigDecimal getCost() {
         return cost;
     }
 
@@ -178,11 +205,11 @@ public class Order implements Serializable {
         this.booking = booking;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -206,10 +233,17 @@ public class Order implements Serializable {
         return round;
     }
 
-    public void setRoundId(Round round) {
+    public void setRound(Round round) {
         this.round = round;
     }
 
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -229,7 +263,6 @@ public class Order implements Serializable {
                 "id=" + getId() +
                 ", booking='" + getBooking() + "'" +
                 ", amount=" + getAmount() +
-                ", ethFee='" + getEthFee() + "'" +
                 ", cost='" + getCost() + "'" +
                 ", status='" + getStatus() + "'" +
                 ", createdAt=" + getCreatedAt() +

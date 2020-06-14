@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,6 +38,8 @@ public class OrderService {
         log.debug("Request to save Order : {}", order);
         return orderRepository.save(order);
     }
+    
+    
 
     /**
      * Get all the orders.
@@ -49,6 +52,19 @@ public class OrderService {
         log.debug("Request to get all Orders");
         return orderRepository.findAll(pageable);
     }
+    
+    /**
+     * Get the orders by owner
+     *
+     * @param ownerId
+     * @return the list of orderss.
+     */
+    @Transactional(readOnly = true)
+    public List<Order> findOrdersByOwnerId(Long ownerId) {
+        log.debug("Request to get all Orders");
+        return orderRepository.findOrdersByOwnerId(ownerId);
+    }
+
 
 
     /**
@@ -61,6 +77,18 @@ public class OrderService {
     public Optional<Order> findOne(Long id) {
         log.debug("Request to get Order : {}", id);
         return orderRepository.findById(id);
+    }
+    
+    /**
+     * Get one order by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Order findOneByOrderId(Long id) {
+        log.debug("Request to get Order : {}", id);
+        return orderRepository.findOneById(id);
     }
 
     /**

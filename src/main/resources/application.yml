@@ -2,6 +2,8 @@ public:
   ip: 128.199.105.133
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://${public.ip}:3306/core?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: aladiex
@@ -10,6 +12,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+       
 
 server:
   port: 9090
