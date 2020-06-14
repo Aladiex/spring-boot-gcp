@@ -78,6 +78,10 @@ public class Round implements Serializable {
 
     private Set<Unfreeze> unfreezes = new HashSet<>();
 
+    @OneToMany(mappedBy = "round")
+
+    private Set<io.aladiex.temp.entity.Order> orders = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = "rounds", allowSetters = true)
     private Project project;

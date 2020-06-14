@@ -52,6 +52,10 @@ public class Asset implements Serializable {
 
     private Set<io.aladiex.temp.entity.Unfreeze> unfreezes = new HashSet<>();
 
+    @OneToMany(mappedBy = "asset")
+
+    private Set<io.aladiex.temp.entity.Order> orders = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = "assets", allowSetters = true)
     private io.aladiex.temp.entity.Customer customer;
