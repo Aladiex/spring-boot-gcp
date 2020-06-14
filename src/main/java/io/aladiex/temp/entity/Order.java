@@ -68,7 +68,7 @@ public class Order implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
-    private long roundId;
+    private Round round;
 
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -202,12 +202,12 @@ public class Order implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Long getRoundId() {
-        return roundId;
+    public Round getRound() {
+        return round;
     }
 
-    public void setRoundId(Long roundId) {
-        this.roundId = roundId;
+    public void setRoundId(Round round) {
+        this.round = round;
     }
 
 

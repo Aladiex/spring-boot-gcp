@@ -41,11 +41,11 @@ public class OrderController{
     
     @PostMapping(value = "/order/{id}/create")
 	@ResponseBody
-	public Order createOrder(@RequestBody Order order, @PathVariable("id") Long id)
+	public Order createOrder(@RequestBody Order order, @PathVariable("id") Long id, @PathVariable("roundId") Long roundId)
 	{
 //    	TODO: check id get tu token
     	Long customerId = order.getCustomerId();
-    	Long roundId = order.getRoundId();
+    	
     	Wallet ethWallet = walletService.findOneByCustomerIdAndCurrencySymbol(customerId, "ETH").get();
     	Wallet usdtWallet = walletService.findOneByCustomerIdAndCurrencySymbol(customerId, "USDT").get();
     	BigDecimal ethBalance = ethWallet.getBalance();
