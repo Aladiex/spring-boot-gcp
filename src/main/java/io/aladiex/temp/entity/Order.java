@@ -24,14 +24,17 @@ public class Order implements Serializable {
     @Column(name = "amount", precision = 21, scale = 2)
     private BigDecimal amount;
 
+    @Column(name = "slot")
+    private Integer slot;
+
     @Column(name = "fee")
     private BigDecimal fee;
 
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "issue")
-    private BigDecimal issue;
+    @Column(name = "cost")
+    private BigDecimal cost;
 
     @Column(name = "usdtHash")
     private String usdtHash;
@@ -96,12 +99,12 @@ public class Order implements Serializable {
         this.price = price;
     }
 
-    public BigDecimal getIssue() {
-        return issue;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setIssue(BigDecimal issue) {
-        this.issue = issue;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public String getUsdtHash() {
@@ -195,7 +198,7 @@ public class Order implements Serializable {
                 ", booking='" + getBooking() + "'" +
                 ", amount=" + getAmount() +
                 ", fee='" + getFee() + "'" +
-                ", issue='" + getIssue() + "'" +
+                ", cost='" + getCost() + "'" +
                 ", status='" + getStatus() + "'" +
                 ", createdAt=" + getCreatedAt() +
                 ", updatedAt=" + getUpdatedAt() +
