@@ -1,5 +1,6 @@
 package io.aladiex.temp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.aladiex.temp.entity.enumeration.Status;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -42,6 +43,10 @@ public class Project implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private io.aladiex.temp.entity.Config config;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "projects", allowSetters = true)
+    private Customer owner;
 
     @OneToMany(mappedBy = "project")
 
@@ -244,6 +249,14 @@ public class Project implements Serializable {
 
     public void setRounds(Set<io.aladiex.temp.entity.Round> rounds) {
         this.rounds = rounds;
+    }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Customer owner) {
+        this.owner = owner;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

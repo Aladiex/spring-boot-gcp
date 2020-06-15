@@ -108,6 +108,10 @@ public class Customer implements Serializable {
 
     private Set<Title> titles = new HashSet<>();
 
+    @OneToMany(mappedBy = "customer")
+
+    private Set<Project> projects = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -433,6 +437,31 @@ public class Customer implements Serializable {
 
     public void setAssets(Set<Asset> assets) {
         this.assets = assets;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public io.aladiex.temp.entity.Customer projects(Set<Project> projects) {
+        this.assets = assets;
+        return this;
+    }
+
+    public io.aladiex.temp.entity.Customer addProjects(Project project) {
+        this.projects.add(project);
+        project.setCustomer(this);
+        return this;
+    }
+
+    public io.aladiex.temp.entity.Customer removeProjects(Project project) {
+        this.projects.remove(project);
+        project.setCustomer(null);
+        return this;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     public Set<Activity> getActivities() {
