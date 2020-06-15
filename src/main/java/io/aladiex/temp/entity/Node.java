@@ -100,6 +100,23 @@ public class Node {
 		}
 		return str;
 	}
+	
+	public int getDescendant()
+	{
+		int descendant=1;
+		if(children.size()==0) return 1;
+		
+		for(int j = 0; j<children.size();j++)
+		{
+			
+			
+				descendant +=children.get(j).getDescendant();
+				
+			
+			
+		}
+		return descendant;
+	}
 
 	public Customer getCustomer() {
 		return customer;

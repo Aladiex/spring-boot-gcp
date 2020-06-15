@@ -76,7 +76,7 @@ public class Customer implements Serializable {
     private String secret;
     
     @Column(name = "sale")
-    private int sale;
+    private int sale=0;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -88,7 +88,18 @@ public class Customer implements Serializable {
     @Column(name = "updated_at")
     private Long updatedAt;
 
-    @OneToMany(mappedBy = "customer")
+    @Column(name = "invested")
+    private boolean invested=false;
+    
+    public boolean isInvested() {
+		return invested;
+	}
+
+	public void setInvested(boolean invested) {
+		this.invested = invested;
+	}
+
+	@OneToMany(mappedBy = "customer")
 
     private Set<Wallet> wallets = new HashSet<>();
 
@@ -108,7 +119,7 @@ public class Customer implements Serializable {
 
     private Set<Title> titles = new HashSet<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "owner")
 
     private Set<Project> projects = new HashSet<>();
 
@@ -444,19 +455,19 @@ public class Customer implements Serializable {
     }
 
     public io.aladiex.temp.entity.Customer projects(Set<Project> projects) {
-        this.assets = assets;
+        this.projects = projects;
         return this;
     }
 
     public io.aladiex.temp.entity.Customer addProjects(Project project) {
         this.projects.add(project);
-        project.setCustomer(this);
+        project.setOwner(this);
         return this;
     }
 
     public io.aladiex.temp.entity.Customer removeProjects(Project project) {
         this.projects.remove(project);
-        project.setCustomer(null);
+        project.setOwner(null);
         return this;
     }
 

@@ -28,7 +28,7 @@ public class PassupController implements SalesAddedListenner {
     private final Logger log = LoggerFactory.getLogger(PassupController.class);
 
     private static final String ENTITY_NAME = "Customer";
-    Map<String, Node> treeMap = new HashMap<String, Node>();
+    public static Map<String, Node> treeMap = new HashMap<String, Node>();
     private final CustomerService customerService;
     Node root = null;
     public PassupController(CustomerService customerService) {
@@ -45,6 +45,7 @@ public class PassupController implements SalesAddedListenner {
         String emailRoot = "root@aladin.com";
         rootCustomer.setEmail(emailRoot);
         rootCustomer.setOrigin(null);
+        rootCustomer.setSponsor(null);
         root = new Node(rootCustomer);
         treeMap.put(emailRoot, root);
         
@@ -63,42 +64,18 @@ public class PassupController implements SalesAddedListenner {
         for(int i=0;i<customers.size();i++)
         {
         	Customer customer = customers.get(i);
-        	String origin = customer.getOrigin();
         	String sponsor = customer.getSponsor();
         	String email = customer.getEmail();
-        	Node node = TreeController.treeMap.get(email);
-        	Node parent = null;
-        	if(origin==null||origin.length()==0)
+        	Node node = treeMap.get(email);
+        	if(sponsor==null||sponsor.length()==0)
         	{
-        		parent = root;
-        		
+        		root.addChild(node);
         	}
         	else
         	{
-        		parent = treeMap.get(origin);
-//        		
-        	}
-        	
-        	if(origin.equals(sponsor)==false)
-        	{
-//        		TODO: check customer invested
-//        		TODO: check indexNumber of child is even
-        		int postition = -1;
-        		for (int j = 0; j < parent.children.size(); j++) {
-        			if(parent.children.get(j).getCustomer().getEmail().equals(email))
-        			{
-        				postition = j+1;
-        			}
-        			
-				} 
-        		
-//        		check index of child is even
-        		if(postition%2==0)
-        		{
-        			log.info("Need passup ");
-        			System.out.println("Need passup ");
-        			parent.getParent().addChild(node);
-        		}
+        		Node parent = treeMap.get(sponsor);
+        		System.out.println("sponsor: "+sponsor);
+        		parent.addChild(node);
         	}
         	
         	
@@ -106,7 +83,7 @@ public class PassupController implements SalesAddedListenner {
     }
     
     /**
-     * {@code GET  /customers} : get the tree.
+     * {@code GET  /passup/all} : get the tree.
      * @return the string of root node
      */
     @GetMapping("passup/all")
@@ -123,6 +100,8 @@ public class PassupController implements SalesAddedListenner {
     	
         return ResponseEntity.ok().body("OK " + treeMap.size() +" node added");
     }
+    
+    
     @GetMapping("passup/addSale/{email}/{sale}")
     public ResponseEntity<String> addSale(@PathVariable String email,@PathVariable int sale) {
     	Node node = this.treeMap.get(email);
@@ -140,7 +119,7 @@ public class PassupController implements SalesAddedListenner {
     }
     
     /**
-     * {@code GET  /customers} : get the tree.
+     * {@code GET  /passup/email/{email} : get the tree.
      * @return the string of node 
      */
     @GetMapping("passup/email/{email}")
@@ -152,7 +131,26 @@ public class PassupController implements SalesAddedListenner {
         return ResponseEntity.ok().body(treeMap.get(email).toString());
         
     }
+    
 
+    /**
+     * {@code GET  /passup/email/{email}/children} : get children of the node.
+     * @return the string of node 
+     */
+    @GetMapping("passup/email/{email}/children")
+    public ResponseEntity<String> getChildrenOfNodeByEmail(@PathVariable String email) {
+    	return ResponseEntity.ok().body(treeMap.get(email).children.size()+"");
+        
+    }
+    
+    /**
+     * {@code GET  /passup/email/{email}/descendant} : get children of the node.
+     * @return the string of node 
+     */
+    @GetMapping("passup/email/{email}/descendant")
+    public ResponseEntity<String> getDescendantOfNodeByEmail(@PathVariable String email) {
+    	return ResponseEntity.ok().body(treeMap.get(email).getDescendant()+"");
+    }
 
 	@Override
 	public void onSalesAdded(SalesAddedEvent event) {

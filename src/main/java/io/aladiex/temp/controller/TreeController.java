@@ -73,8 +73,11 @@ public class TreeController implements SalesAddedListenner {
         	else
         	{
         		Node parent = treeMap.get(origin);
+        		System.out.println("origin: "+origin);
         		parent.addChild(node);
         	}
+        	
+        	
         }        
     }
     
@@ -96,6 +99,8 @@ public class TreeController implements SalesAddedListenner {
     	
         return ResponseEntity.ok().body("OK " + treeMap.size() +" node added");
     }
+    
+    
     @GetMapping("tree/addSale/{email}/{sale}")
     public ResponseEntity<String> addSale(@PathVariable String email,@PathVariable int sale) {
     	Node node = this.treeMap.get(email);
@@ -113,7 +118,7 @@ public class TreeController implements SalesAddedListenner {
     }
     
     /**
-     * {@code GET  /customers} : get the tree.
+     * {@code GET  /tree/email/{email} : get the tree.
      * @return the string of node 
      */
     @GetMapping("tree/email/{email}")
@@ -125,7 +130,25 @@ public class TreeController implements SalesAddedListenner {
         return ResponseEntity.ok().body(treeMap.get(email).toString());
         
     }
+    
 
+    /**
+     * {@code GET  /tree/email/{email}/children} : get children of the node.
+     * @return the string of node 
+     */
+    @GetMapping("tree/email/{email}/children")
+    public ResponseEntity<String> getChildrenOfNodeByEmail(@PathVariable String email) {
+        return ResponseEntity.ok().body(treeMap.get(email).children.size()+"");
+    }
+    
+    /**
+     * {@code GET  /tree/email/{email}/children} : get children of the node.
+     * @return the string of node 
+     */
+    @GetMapping("tree/email/{email}/descendant")
+    public ResponseEntity<String> getDescendantOfNodeByEmail(@PathVariable String email) {
+    	return ResponseEntity.ok().body(treeMap.get(email).getDescendant()+"");        
+    }
 
 	@Override
 	public void onSalesAdded(SalesAddedEvent event) {

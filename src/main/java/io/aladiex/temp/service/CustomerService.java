@@ -61,6 +61,18 @@ public class CustomerService {
         log.debug("Request to get all Customers");
         return customerRepository.findAll();
     }
+    
+   
+    
+    /**
+     * Get all the customers invested.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Customer> getAllByInvested() {
+        log.debug("Request to get all Customers");
+        return customerRepository.findAllByInvested(true);
+    }
 
 
     /**
