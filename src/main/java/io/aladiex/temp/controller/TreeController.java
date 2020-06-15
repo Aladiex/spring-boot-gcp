@@ -23,15 +23,15 @@ import io.aladiex.temp.tree.SalesAddedListenner;
  */
 @RestController
 @RequestMapping("/api")
-public class CustomerController implements SalesAddedListenner {
+public class TreeController implements SalesAddedListenner {
 
-    private final Logger log = LoggerFactory.getLogger(CustomerController.class);
+    private final Logger log = LoggerFactory.getLogger(TreeController.class);
 
     private static final String ENTITY_NAME = "Customer";
-    Map<String, Node> treeMap = new HashMap<String, Node>();
+    public static Map<String, Node> treeMap = new HashMap<String, Node>();
     private final CustomerService customerService;
     Node root = null;
-    public CustomerController(CustomerService customerService) {
+    public TreeController(CustomerService customerService) {
         this.customerService = customerService;  
     }
     
