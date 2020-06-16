@@ -82,7 +82,7 @@ public class TreeController implements SalesAddedListenner {
     }
     
     /**
-     * {@code GET  /customers} : get the tree.
+     * {@code GET  tree/all} : get the tree.
      * @return the string of root node
      */
     @GetMapping("tree/all")
@@ -92,6 +92,11 @@ public class TreeController implements SalesAddedListenner {
         
     }
     
+    
+    /**
+     * {@code GET  tree/create} : create the tree.
+     * @return the string size of node
+     */
     @GetMapping("tree/create")
     public ResponseEntity<String> createTree() {
     	this.treeMap.clear();
@@ -100,7 +105,11 @@ public class TreeController implements SalesAddedListenner {
         return ResponseEntity.ok().body("OK " + treeMap.size() +" node added");
     }
     
-    
+    /**
+     * {@code GET  /tree/addSale/{email}/{sale}} : add the sale for Node.
+     * @param String email, int sale
+     * @return the string ok  if add sale to node success
+     */
     @GetMapping("tree/addSale/{email}/{sale}")
     public ResponseEntity<String> addSale(@PathVariable String email,@PathVariable int sale) {
     	Node node = this.treeMap.get(email);
@@ -143,11 +152,20 @@ public class TreeController implements SalesAddedListenner {
     
     /**
      * {@code GET  /tree/email/{email}/children} : get children of the node.
-     * @return the string of node 
+     * @return the total decendant of node -1 
      */
     @GetMapping("tree/email/{email}/descendant")
     public ResponseEntity<String> getDescendantOfNodeByEmail(@PathVariable String email) {
     	return ResponseEntity.ok().body(treeMap.get(email).getDescendant()+"");        
+    }
+    
+    /**
+     * {@code GET  /tree/email/{email}/sale} : get children of the node.
+     * @return the string of node 
+     */
+    @GetMapping("tree/email/{email}/sale")
+    public ResponseEntity<String> getSaleOfNodeByEmail(@PathVariable String email) {
+    	return ResponseEntity.ok().body(treeMap.get(email).getCustomer().getSale()+"");        
     }
 
 	@Override
