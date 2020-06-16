@@ -15,5 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	Optional<Customer> findByEmail(String email);
+	Boolean existsByEmail(String email);
 	List<Customer> findAllByInvested(boolean invested);
+	List<Customer> findAllByOrderByCreatedAtAsc();
 }

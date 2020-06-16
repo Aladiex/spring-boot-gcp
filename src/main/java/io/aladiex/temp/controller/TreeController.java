@@ -1,8 +1,11 @@
 package io.aladiex.temp.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +31,10 @@ public class TreeController implements SalesAddedListenner {
     private final Logger log = LoggerFactory.getLogger(TreeController.class);
 
     private static final String ENTITY_NAME = "Customer";
+    
     public static Map<String, Node> treeMap = new HashMap<String, Node>();
+    public static List<Customer> customers = new ArrayList<>();
+    
     private final CustomerService customerService;
     Node root = null;
     public TreeController(CustomerService customerService) {
@@ -48,37 +54,39 @@ public class TreeController implements SalesAddedListenner {
         root = new Node(rootCustomer);
         treeMap.put(emailRoot, root);
         
-        List<Customer> customers = customerService.getAll();
+        customers = customerService.getAll();
         log.info("length of customer: "+customers.size());
         
         for(int i=0;i<customers.size();i++)
         {
         	Customer customer = customers.get(i);
-        	String email = customer.getEmail();
+        	String email = customer.getEmail().trim();
         	Node node = new Node(customer);
         	node.setListenner(this);
         	treeMap.put(email, node);	
         }
         
-        for(int i=0;i<customers.size();i++)
-        {
-        	Customer customer = customers.get(i);
-        	String origin = customer.getOrigin();
-        	String email = customer.getEmail();
-        	Node node = treeMap.get(email);
-        	if(origin==null||origin.length()==0)
-        	{
-        		root.addChild(node);
-        	}
-        	else
-        	{
-        		Node parent = treeMap.get(origin);
-        		System.out.println("origin: "+origin);
-        		parent.addChild(node);
-        	}
-        	
-        	
-        }        
+       
+        
+//        List<String> origins = Arrays.asList("buidinhngoc.ai@gmail.com", "contact@winvest.io", "hoangdev@gmail.com");
+        List<String> origins = Arrays.asList("hoangdev@gmail.com");
+        origins.forEach(orig -> {
+        	Node origin = treeMap.get(orig);
+        	root.addChild(origin);
+        	buildTree(origin);
+        });
+        
+    }
+    
+    private void buildTree(Node ala) {
+    	String email = ala.getCustomer().getEmail();
+    	if (email == null || email.isEmpty()) return;
+    	List<Customer> customs = customers.stream().filter(item -> item.getOrigin().equalsIgnoreCase(email)).collect(Collectors.toList());
+    	customs.forEach(item -> {
+    		Node node = treeMap.get(item.getEmail());
+    		ala.addChild(node);
+    		buildTree(node);
+    	});
     }
     
     /**
@@ -167,7 +175,7 @@ public class TreeController implements SalesAddedListenner {
     public ResponseEntity<String> getSaleOfNodeByEmail(@PathVariable String email) {
     	return ResponseEntity.ok().body(treeMap.get(email).getCustomer().getSale()+"");        
     }
-
+    
 	@Override
 	public void onSalesAdded(SalesAddedEvent event) {
 		// TODO Auto-generated method stub

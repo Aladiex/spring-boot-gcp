@@ -6,6 +6,7 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://${public.ip}:3306/core?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+#    url: jdbc:mysql://${public.ip}:3306/ala?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: aladiex
     password: alaala
   jpa:

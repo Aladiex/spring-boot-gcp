@@ -1,8 +1,11 @@
 package io.aladiex.temp.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,7 @@ public class PassupController implements SalesAddedListenner {
 
     private static final String ENTITY_NAME = "Customer";
     public static Map<String, Node> treeMap = new HashMap<String, Node>();
+    public static List<Customer> customers = new ArrayList<>();
     private final CustomerService customerService;
     Node root = null;
     public PassupController(CustomerService customerService) {
@@ -45,42 +49,44 @@ public class PassupController implements SalesAddedListenner {
         String emailRoot = "root@aladin.com";
         rootCustomer.setEmail(emailRoot);
         rootCustomer.setOrigin(null);
-        rootCustomer.setSponsor(null);
         root = new Node(rootCustomer);
         treeMap.put(emailRoot, root);
         
-        List<Customer> customers = customerService.getAll();
+        customers = customerService.getAll();
         log.info("length of customer: "+customers.size());
         
         for(int i=0;i<customers.size();i++)
         {
         	Customer customer = customers.get(i);
-        	String email = customer.getEmail();
+        	String email = customer.getEmail().trim();
         	Node node = new Node(customer);
         	node.setListenner(this);
         	treeMap.put(email, node);	
         }
         
-        for(int i=0;i<customers.size();i++)
-        {
-        	Customer customer = customers.get(i);
-        	String sponsor = customer.getSponsor();
-        	String email = customer.getEmail();
-        	Node node = treeMap.get(email);
-        	if(sponsor==null||sponsor.length()==0)
-        	{
-        		root.addChild(node);
-        	}
-        	else
-        	{
-        		Node parent = treeMap.get(sponsor);
-        		System.out.println("sponsor: "+sponsor);
-        		parent.addChild(node);
-        	}
-        	
-        	
-        }        
+        
+        
+//        List<String> origins = Arrays.asList("buidinhngoc.ai@gmail.com", "contact@winvest.io", "hoangdev@gmail.com");
+        List<String> sponsors = Arrays.asList("hoangdev@gmail.com");
+        sponsors.forEach(spons -> {
+        	Node sponsor = treeMap.get(spons);
+        	root.addChild(sponsor);
+        	buildTree(sponsor);
+        });
+        
     }
+    
+    private void buildTree(Node ala) {
+    	String email = ala.getCustomer().getEmail();
+    	if (email == null || email.isEmpty()) return;
+    	List<Customer> customs = customers.stream().filter(item -> item.getSponsor().equalsIgnoreCase(email)).collect(Collectors.toList());
+    	customs.forEach(item -> {
+    		Node node = treeMap.get(item.getEmail());
+    		ala.addChild(node);
+    		buildTree(node);
+    	});
+    }
+    
     
     /**
      * {@code GET  /passup/all} : get the tree.

@@ -59,7 +59,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public List<Customer> getAll() {
         log.debug("Request to get all Customers");
-        return customerRepository.findAll();
+        return customerRepository.findAllByOrderByCreatedAtAsc();
     }
     
    
@@ -85,6 +85,12 @@ public class CustomerService {
     public Optional<Customer> findOne(Long id) {
         log.debug("Request to get Customer : {}", id);
         return customerRepository.findById(id);
+    }
+    
+    @Transactional(readOnly = true)
+    public Boolean existsByEmail(String email) {
+        log.debug("Request to get Customer : {}", email);
+        return customerRepository.existsByEmail(email);
     }
 
     /**
