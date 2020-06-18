@@ -63,6 +63,10 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project")
 
     private Set<io.aladiex.temp.entity.Round> rounds = new HashSet<>();
+    
+    @OneToMany(mappedBy = "project")
+
+    private Set<RateLock> rateLocks = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {

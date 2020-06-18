@@ -1,7 +1,6 @@
 package io.aladiex.temp.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterators;
 import io.aladiex.temp.entity.Customer;
 import io.aladiex.temp.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;

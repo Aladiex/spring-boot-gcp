@@ -90,6 +90,29 @@ public class TreeController implements SalesAddedListenner {
     }
     
     /**
+     * add new node to the treeMap.
+     * @param new Customer
+     * @return the treeMap with new node.
+     */
+    public Map<String, Node> addNewNode(Customer newCustomer)
+    {
+    	Node newNode = new Node(newCustomer);
+    	String email = newCustomer.getEmail();
+    	String origin = newCustomer.getOrigin();
+    	if(treeMap.get(email)==null)
+    	{
+    		if(origin.length()>0||origin!=null)
+        	{
+        		Node parentNode = treeMap.get(origin);
+        		parentNode.addChild(newNode);
+        		treeMap.put(email, newNode);
+        	}
+    	}
+    	
+    	return treeMap;
+    }
+    
+    /**
      * {@code GET  tree/all} : get the tree.
      * @return the string of root node
      */
