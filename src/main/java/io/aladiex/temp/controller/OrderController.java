@@ -1,6 +1,9 @@
 package io.aladiex.temp.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.aladiex.temp.entity.Asset;
+import io.aladiex.temp.entity.LockItem;
 import io.aladiex.temp.entity.Order;
+import io.aladiex.temp.entity.Round;
 import io.aladiex.temp.service.OrderService;
 import io.aladiex.temp.service.RoundService;
 import io.aladiex.temp.service.WalletService;
@@ -86,7 +92,41 @@ public class OrderController{
 //    		}
 //    	}
 //    	if()
-    	return order;
+    	
+    	// gia su user mua ala = ma vong hien tai la vong 1 cofouder => gia ala va goi ...
+    	
+    	// gia su day laf order mua ala  tai vong cofounder gia ala la 0.3 usd 1 goi laf 10000 usdt => so luong ala phai tra la 33333.3333
+    	//voi ty le lock tai cac vong la 
+    	//0,3,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,0,0,0,0,0,0,0,0,0,0,0,0
+    	
+    	//Buoc 1 chuyen ala vao asset bang cach insert hoac update ( voi user da co ala ) va frozen toan bo 
+    	// Buoc 2 chuyen ala vao kho lockitem bang cach select ra bang ty le giai bang trong bangr Round 
+    	
+    	
+    	
+    	// vi du assetID cua ala la 1
+    	String lockrate = "0,3,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,0,0,0,0,0,0,0,0,0,0,0,0";
+    	
+    	List<Double> convertedRankList = Stream.of(lockrate.split(","))
+    			  .map(String::trim)
+    			  .map(Double::parseDouble)
+    			  .collect(Collectors.toList());
+    	
+    	
+    	for (int i = 0; i < convertedRankList.size(); i++) {
+			LockItem item = new LockItem();
+			item.setAssetId(1L);
+			item.setAmount(new BigDecimal(33333.3333*convertedRankList.get(i))); // SL bi lock tai vong thu i
+			item.setRound(i);
+			// insert lock to DB
+		}
+    	
+    	// Xong viec insert vao Lockitem 
+    	
+    	// Viet them vai ham kieu nhu getLockedAmountByRound
+    	//getLockedAmount  
+    	
+    	return null;
 	}
 	
 }

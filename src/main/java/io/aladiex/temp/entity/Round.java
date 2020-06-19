@@ -1,16 +1,25 @@
 package io.aladiex.temp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.aladiex.temp.entity.enumeration.Standard;
-import io.aladiex.temp.entity.enumeration.Status;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import io.aladiex.temp.entity.enumeration.Standard;
+import io.aladiex.temp.entity.enumeration.Status;
 
 /**
  * A Round.
@@ -52,10 +61,15 @@ public class Round implements Serializable {
 
     @Column(name = "token_price", precision = 21, scale = 2)
     private BigDecimal tokenPrice;
-
+//  Quantity of bonus token for investor in previous round.
     @Column(name = "reward", precision = 21, scale = 2)
     private BigDecimal reward;
 
+    
+   
+    @Column(name = "unlockRate")
+    private String unlockRate ;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private Standard type;
@@ -378,4 +392,5 @@ public class Round implements Serializable {
             ", updatedAt=" + getUpdatedAt() +
             "}";
     }
+
 }
