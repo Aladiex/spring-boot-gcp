@@ -13,12 +13,15 @@ import javax.persistence.Table;
 public class LockItem {
 	 private static final long serialVersionUID = 1L;
 
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	@Column(name = "round")
 	private int round;
+	@Column(name = "amount")
+	private BigDecimal amount;
+	@Column(name = "asset_id")
+	private Long assetId;
 	
 	public Long getId() {
 		return id;
@@ -47,8 +50,4 @@ public class LockItem {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	@Column(name = "amount")
-	private BigDecimal amount;
-	@Column(name = "asset_id")
-	private Long assetId;
 }
