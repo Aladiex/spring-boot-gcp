@@ -61,6 +61,18 @@ public class RoundService {
         log.debug("Request to get Round : {}", id);
         return roundRepository.findById(id);
     }
+    
+    /**
+     * Get one round by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public String getUnlockRate(Long projectId, String status) {
+        
+        return roundRepository.findByProjectIdAndStatus(projectId, "ACTIVE").get().getUnlockRate();
+    }
 
     /**
      * Delete the round by id.

@@ -70,7 +70,15 @@ public class Round implements Serializable {
     @Column(name = "unlockRate")
     private String unlockRate ;
     
-    @Enumerated(EnumType.STRING)
+    public String getUnlockRate() {
+		return unlockRate;
+	}
+
+	public void setUnlockRate(String unlockRate) {
+		this.unlockRate = unlockRate;
+	}
+
+	@Enumerated(EnumType.STRING)
     @Column(name = "type")
     private Standard type;
 

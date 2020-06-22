@@ -18,6 +18,7 @@ import io.aladiex.temp.entity.Asset;
 import io.aladiex.temp.entity.LockItem;
 import io.aladiex.temp.entity.Order;
 import io.aladiex.temp.entity.Round;
+import io.aladiex.temp.service.LockItemService;
 import io.aladiex.temp.service.OrderService;
 import io.aladiex.temp.service.RoundService;
 import io.aladiex.temp.service.WalletService;
@@ -35,12 +36,14 @@ public class OrderController{
     private final OrderService orderService;
     private final WalletService walletService;
     private final RoundService roundService;
+    private final LockItemService lockItemService;
     
-    public OrderController(OrderService orderService, WalletService walletService, RoundService roundService) {
+    public OrderController(OrderService orderService, WalletService walletService, RoundService roundService, LockItemService lockItemService) {
 		// TODO Auto-generated constructor stub
     	this.orderService = orderService;
     	this.walletService = walletService;
     	this.roundService = roundService;
+    	this.lockItemService = lockItemService;
 	}
     
     @PostMapping(value = "/order/my")
@@ -105,9 +108,11 @@ public class OrderController{
     	
     	
     	// vi du assetID cua ala la 1
-    	String lockrate = "0,3,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,0,0,0,0,0,0,0,0,0,0,0,0";
+//    	Long projectId = 1;
+//    	String lockRate = roundService.getUnlockRate(projectId, "ACTIVE");
+    	String fakeLockRate = "0,3,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,0,0,0,0,0,0,0,0,0,0,0,0";
     	
-    	List<Double> convertedRankList = Stream.of(lockrate.split(","))
+    	List<Double> convertedRankList = Stream.of(fakeLockRate.split(","))
     			  .map(String::trim)
     			  .map(Double::parseDouble)
     			  .collect(Collectors.toList());
@@ -116,15 +121,18 @@ public class OrderController{
     	for (int i = 0; i < convertedRankList.size(); i++) {
 			LockItem item = new LockItem();
 			item.setAssetId(1L);
-			item.setAmount(new BigDecimal(33333.3333*convertedRankList.get(i))); // SL bi lock tai vong thu i
+			Double fakeAmount = 33333.3333;
+			item.setAmount(new BigDecimal(fakeAmount*convertedRankList.get(i))); // SL bi lock tai vong thu i
 			item.setRound(i);
 			// insert lock to DB
+			lockItemService.save(item);
 		}
     	
     	// Xong viec insert vao Lockitem 
     	
-    	// Viet them vai ham kieu nhu getLockedAmountByRound
-    	//getLockedAmount  
+    	// TODO:  getLockedAmountAtRound - done
+//    	TODO:  getLockedAmount - done
+//    	TODO: getBonus()
     	
     	return null;
 	}
