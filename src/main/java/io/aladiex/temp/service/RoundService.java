@@ -69,9 +69,9 @@ public class RoundService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public String getUnlockRate(Long projectId, String status) {
+    public Round getCurrentRound(Long projectId, String status) {
         
-        return roundRepository.findByProjectIdAndStatus(projectId, "ACTIVE").get().getUnlockRate();
+        return roundRepository.findByProjectIdAndStatus(projectId, "ACTIVE").get();
     }
 
     /**

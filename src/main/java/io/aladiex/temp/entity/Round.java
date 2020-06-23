@@ -65,9 +65,20 @@ public class Round implements Serializable {
     @Column(name = "reward", precision = 21, scale = 2)
     private BigDecimal reward;
 
+//    order number of round 
+    @Column(name = "jhi_order")
+    private Integer order;
     
    
-    @Column(name = "unlockRate")
+    public Integer getOrder() {
+		return order;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
+	}
+
+	@Column(name = "unlockRate")
     private String unlockRate ;
     
     public String getUnlockRate() {
@@ -76,6 +87,17 @@ public class Round implements Serializable {
 
 	public void setUnlockRate(String unlockRate) {
 		this.unlockRate = unlockRate;
+	}
+	
+	@Column(name = "bonusAmount")
+    private String bonusAmount;
+
+	public String getBonusAmount() {
+		return bonusAmount;
+	}
+
+	public void setBonusAmount(String bonusAmount) {
+		this.bonusAmount = bonusAmount;
 	}
 
 	@Enumerated(EnumType.STRING)

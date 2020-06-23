@@ -1,6 +1,7 @@
 package io.aladiex.temp.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.aladiex.temp.entity.Asset;
+import io.aladiex.temp.entity.Bonus;
 import io.aladiex.temp.entity.LockItem;
 import io.aladiex.temp.entity.Order;
 import io.aladiex.temp.entity.Round;
+import io.aladiex.temp.service.BonusService;
 import io.aladiex.temp.service.LockItemService;
 import io.aladiex.temp.service.OrderService;
 import io.aladiex.temp.service.RoundService;
@@ -37,13 +40,15 @@ public class OrderController{
     private final WalletService walletService;
     private final RoundService roundService;
     private final LockItemService lockItemService;
+    private final BonusService bonusService;
     
-    public OrderController(OrderService orderService, WalletService walletService, RoundService roundService, LockItemService lockItemService) {
+    public OrderController(OrderService orderService, WalletService walletService, RoundService roundService, LockItemService lockItemService, BonusService bonusService) {
 		// TODO Auto-generated constructor stub
     	this.orderService = orderService;
     	this.walletService = walletService;
     	this.roundService = roundService;
     	this.lockItemService = lockItemService;
+    	this.bonusService = bonusService;
 	}
     
     @PostMapping(value = "/order/my")
@@ -106,11 +111,18 @@ public class OrderController{
     	// Buoc 2 chuyen ala vao kho lockitem bang cach select ra bang ty le giai bang trong bangr Round 
     	
     	
-    	
+//    	TODO: insert into order, asset
+    	Order ordered = orderService.save(order);
+    	int slot = ordered.getSlot();
     	// vi du assetID cua ala la 1
-//    	Long projectId = 1;
-//    	String lockRate = roundService.getUnlockRate(projectId, "ACTIVE");
+//    	Long projectId = 1L;
+//    	Round currentRound= roundService.getCurrentRound(projectId, "ACTIVE");
+//    	String lockRate = currentRound.getUnlockRate();
+//    	String bonusAmount = currentRound.getBonusAmount();
     	String fakeLockRate = "0,3,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.9,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.7,0,0,0,0,0,0,0,0,0,0,0,0";
+    	String fakeBonusAmount = "0,0,0,33888.88889,22699.44444,52262.98519,91787.87935,158040.6288,291058.158,522051.1514,963498.0971,1226912.605";
+    	
+    	
     	
     	List<Double> convertedRankList = Stream.of(fakeLockRate.split(","))
     			  .map(String::trim)
@@ -121,18 +133,40 @@ public class OrderController{
     	for (int i = 0; i < convertedRankList.size(); i++) {
 			LockItem item = new LockItem();
 			item.setAssetId(1L);
+//			BigDecimal tokenAmount = currentRound.getReward();
 			Double fakeAmount = 33333.3333;
-			item.setAmount(new BigDecimal(fakeAmount*convertedRankList.get(i))); // SL bi lock tai vong thu i
+			item.setAmount(new BigDecimal(slot*fakeAmount*convertedRankList.get(i))); // SL bi lock tai vong thu i
 			item.setRound(i);
 			// insert lock to DB
 			lockItemService.save(item);
 		}
     	
-    	// Xong viec insert vao Lockitem 
+    	List<Double> convertedBonusAmountList = Stream.of(fakeBonusAmount.split(","))
+  			  .map(String::trim)
+  			  .map(Double::parseDouble)
+  			  .collect(Collectors.toList());
+    	
+    	for(int j=0;j<convertedBonusAmountList.size();j++)
+    	{
+    		if(convertedBonusAmountList.get(j)==0)continue;
+    		for (int i = 0; i < convertedRankList.size(); i++) {
+    			Bonus item = new Bonus();
+    			item.setAssetId(1L);
+    			Double bonusAmount = convertedBonusAmountList.get(j);
+    			item.setAmount(new BigDecimal(slot*bonusAmount*convertedRankList.get(i))); // SL bi lock tai vong thu i
+    			item.setRound(i);
+    			item.setStatus("INACTIVE");
+    			// insert bonus to DB - done
+    			bonusService.save(item);
+    		}
+    	}
+    	
+    	
     	
     	// TODO:  getLockedAmountAtRound - done
-//    	TODO:  getLockedAmount - done
-//    	TODO: getBonus()
+//    	TODO:  getLockedAmount - done 
+    	// TODO:  getLockedBonusAmountAtRound - done
+//    	TODO:  getLockedBonusAmount - done 
     	
     	return null;
 	}
